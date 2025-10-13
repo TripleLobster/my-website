@@ -1,12 +1,347 @@
 <!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2025 by anonymous (http://jsbin.com/vavawujule/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>witix net?</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>witixtopia</title>
+<style>
+  body{
+    margin:0;
+    height:100vh;
+    background:url('https://wallpapercave.com/wp/wp2751540.jpg') no-repeat center center fixed;
+    background-size:cover;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow:hidden;
+  }
+
+  /* Explorer */
+  .win10-window{
+    width:500px;
+    height:400px;
+    background:#111;
+    border:1px solid #000;
+    position:absolute;
+    top:80px;
+    left:80px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.55);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .win10-header{
+    background:#000;
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:stretch;
+    height:30px;
+    cursor:move;
+    user-select:none;
+  }
+  .win10-header .title{ padding:5px 10px; display:flex; align-items:center; font-weight:normal; text-transform:lowercase; }
+  .win10-header .close-btn{ width:40px; background:#000; color:#fff; text-align:center; line-height:30px; cursor:default; font-size:20px; font-weight:normal; }
+
+  .win10-content{
+    flex:1;
+    padding:10px;
+    display:flex;
+    flex-wrap:wrap;
+    background:#222;
+    overflow:auto;
+  }
+
+  .file{
+    width:80px;
+    height:80px;
+    background:#1a1a1a;
+    border-radius:6px;
+    margin:10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:12px;
+    color:#fff;
+    user-select:none;
+    transition:transform 0.16s ease, box-shadow 0.16s ease;
+    text-transform:lowercase;
+  }
+  .file:hover{ transform: translateY(-4px) scale(1.04); box-shadow:0 8px 18px rgba(0,0,0,0.6); }
+  .file img{ width:40px; height:40px; margin-bottom:6px; display:block; }
+
+  /* Windows (resizable) */
+  .text-window{
+    width:400px;
+    height:250px;
+    background:#111;
+    border:1px solid #000;
+    position:absolute;
+    top:120px;
+    left:120px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    opacity:0;
+    transform:scale(0.72);
+    transition:opacity 0.28s ease, transform 0.28s ease;
+    resize:both;
+    overflow:auto;
+    color:#fff;
+  }
+  .text-window.show{ opacity:1; transform:scale(1); }
+
+  .text-window .win10-header{
+    background:#000;
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:stretch;
+    height:30px;
+    cursor:move;
+    user-select:none;
+  }
+  .text-window .win10-header .title{ padding:5px 10px; display:flex; align-items:center; font-weight:normal; text-transform:lowercase; }
+  .text-window .win10-header .close-btn{ width:40px; text-align:center; line-height:30px; cursor:pointer; font-size:20px; font-weight:normal; transition:background 0.18s; }
+  .text-window .win10-header .close-btn:hover{ background:red; }
+  .text-window .win10-content{ flex:1; padding:12px; overflow:auto; background:#151515; color:#fff; }
+
+  /* EXE window */
+  .exe-window{ width:520px; height:380px; }
+
+  /* Language cards */
+  .language-card{
+    width:100px;
+    height:120px;
+    perspective:700px;
+    margin:8px;
+  }
+  .language-inner{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition: transform 0.6s cubic-bezier(.2,.9,.2,1);
+    will-change:transform;
+  }
+
+  .language-front, .language-back{
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-radius:10px;
+    backface-visibility:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:#333;
+    box-shadow:0 6px 18px rgba(0,0,0,0.45);
+    font-weight:700;
+    color:#fff;
+  }
+
+  .language-front img{ width:64px; height:auto; margin-bottom:6px; display:block; }
+  .language-front span{ margin-top:4px; display:block; font-size:13px; }
+
+  /* Spanish name slightly smaller */
+  .language-card:nth-child(4) .language-front span{ font-size:11px; }
+
+  .language-back{
+    transform:rotateY(180deg);
+    background:#FFD93D;
+    color:#000;
+    font-size:13px; /* slightly smaller so long phrases fit */
+    padding:6px;
+    text-align:center;
+  }
+
+  /* subtle back glow on hover (not scary) */
+  .file.warn:hover img{ filter: none; transform: none; }
+  .warning-hover { transition: box-shadow .18s ease; }
+  .warning-hover:hover { box-shadow:0 10px 26px rgba(255,160,60,0.12); }
+</style>
 </head>
 <body>
-  <h1>umm how do you make a website guys..</h1>
+
+  <div class="win10-window" id="fileExplorer">
+    <div class="win10-header">
+      <div class="title">witix explorer</div>
+      <div class="close-btn">X</div>
+    </div>
+
+    <div class="win10-content">
+      <!-- renamed intro -> YOOOOO -->
+      <div class="file" ondblclick="openTextWindow('YOOOOO', introContent)">
+        <img src="https://img.icons8.com/fluency/48/document.png" alt="doc"> YOOOOO
+      </div>
+
+      <div class="file" ondblclick="openTextWindow('hobbies', hobbiesContent)">
+        <img src="https://img.icons8.com/fluency/48/document.png" alt="doc"> hobbies
+      </div>
+
+      <!-- less-scary warning icon instead of skull; subtle hover glow class applied -->
+      <div class="file warn warning-hover" ondblclick="openTextWindow('before-you-go', rulesContent)">
+        <img src="https://img.icons8.com/fluency/48/warning-shield.png" alt="warn"> before you go
+      </div>
+
+      <div class="file" ondblclick="openTextWindow('languages', languagesContent, true)">
+        <img src="https://img.icons8.com/fluency/48/exe.png" alt="exe"> languages
+      </div>
+    </div>
+  </div>
+
+<script>
+/* drag only while holding header */
+function dragElement(elm){
+  const header = elm.querySelector('.win10-header');
+  let offsetX=0, offsetY=0, isDragging=false;
+
+  header.addEventListener('mousedown', e=>{
+    isDragging = true;
+    offsetX = e.clientX - elm.offsetLeft;
+    offsetY = e.clientY - elm.offsetTop;
+    elm.style.zIndex = 1000;
+  });
+
+  document.addEventListener('mousemove', e=>{
+    if(!isDragging) return;
+    elm.style.left = (e.clientX - offsetX) + 'px';
+    elm.style.top  = (e.clientY - offsetY) + 'px';
+  });
+
+  document.addEventListener('mouseup', ()=>{
+    isDragging = false;
+    elm.style.zIndex = '';
+  });
+}
+dragElement(document.getElementById('fileExplorer'));
+
+/* file contents */
+const introContent = `
+  <p>hey there buddies! im witix!!!!!</p>
+  <p>there isn't much to say about me hmm.. yeah idk..</p>
+`;
+
+const hobbiesContent = `
+  <p>i play piano! i also liked to play my harmonica but i lost it.. ૮(˶╥︿╥)ა</p>
+  <p>i like making stuff! mainly drawing, coding and editing</p>
+  <p>I REALLY like space, guns and fighter jets but I particularily like firearm history</p>
+  <p>i LOVE niche obscure math topics yes...</p>
+`;
+
+const rulesContent = `
+  <p>i'm a minor, be aware!</p>
+  <p>Please don't talk about nsfw topics blahh I won't like it!!</p>
+  <p>Don't be mean for no reason, that's stupid</p>
+  <p>plz plzz plzzz dont bring up politics they suck...
+i dont wanna know what part of the poop cake is your favorite</p>
+  <p>Please avoid assuming anything about me if you do not know me personally.</p>
+  <p>I PROMISE I WILL NOT HURT YOU!! if you have a question don't be afraid to ask!</p>
+`;
+
+/* languages: flags (w40) and data */
+const languagesContent = `
+  <div style="display:flex; flex-wrap:wrap;">
+    ${[
+      {flag:'fr', lang:'French', prof:'Fluent'},
+      {flag:'gb', lang:'English', prof:'Fluent'},
+      {flag:'de', lang:'German', prof:'Fluent'},
+      {flag:'es', lang:'Spanish', prof:'Can read/understand'},
+      {flag:'ru', lang:'Russian', prof:'Learning'},
+      {flag:'jp', lang:'Japanese', prof:'Learning'}
+    ].map((l, idx) => `
+      <div class="language-card">
+        <div class="language-inner">
+          <div class="language-front">
+            <img src="https://flagcdn.com/w80/${l.flag}.png" alt="${l.lang} flag">
+            <span>${l.lang}</span>
+          </div>
+          <div class="language-back">${l.prof}</div>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+`;
+
+/* open/close windows with stacking + interactive flip based on mouse entry side */
+const openWindows = {};
+function openTextWindow(title, content, isExe=false){
+  if(openWindows[title]) return;
+  openWindows[title] = true;
+
+  const win = document.createElement('div');
+  win.className = 'text-window' + (isExe ? ' exe-window' : '');
+  win.id = title;
+  win.innerHTML = `
+    <div class="win10-header">
+      <div class="title">${title}</div>
+      <div class="close-btn" onclick="closeTextWindow('${title}')">X</div>
+    </div>
+    <div class="win10-content">${content}</div>
+  `;
+  document.body.appendChild(win);
+  dragElement(win);
+  // small z-index bump so new window sits on top
+  win.style.zIndex = 1000;
+  requestAnimationFrame(()=> win.classList.add('show'));
+
+  // interactive language flip (hover) — directional based on mouse approach
+  if(isExe){
+    const cards = win.querySelectorAll('.language-card');
+    cards.forEach(card=>{
+      const inner = card.querySelector('.language-inner');
+
+      card.addEventListener('mouseenter', e=>{
+        const rect = card.getBoundingClientRect();
+        // compute pointer relative to center (-1..1)
+        const dx = (e.clientX - (rect.left + rect.width/2)) / (rect.width/2);
+        const dy = (e.clientY - (rect.top  + rect.height/2)) / (rect.height/2);
+        // clamp to [-1,1]
+        const rx = Math.max(-1, Math.min(1, dy));
+        const ry = Math.max(-1, Math.min(1, dx));
+        // rotate so flip direction follows pointer: rotateX from y, rotateY from x, and flip 180deg
+        const rotateX = -12 * rx; // tilt by vertical approach
+        const rotateY =  12 * ry; // tilt by horizontal approach
+        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY + 180}deg)`;
+      });
+
+      card.addEventListener('mousemove', e=>{
+        // subtle dynamic tilt while hovering
+        const rect = card.getBoundingClientRect();
+        const dx = (e.clientX - (rect.left + rect.width/2)) / (rect.width/2);
+        const dy = (e.clientY - (rect.top  + rect.height/2)) / (rect.height/2);
+        const rx = Math.max(-1, Math.min(1, dy));
+        const ry = Math.max(-1, Math.min(1, dx));
+        const rotateX = -10 * rx;
+        const rotateY =  10 * ry + 180;
+        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      card.addEventListener('mouseleave', ()=>{
+        // reset
+        inner.style.transform = '';
+      });
+    });
+  }
+}
+
+/* close window */
+function closeTextWindow(title){
+  const win = document.getElementById(title);
+  if(!win) return;
+  win.classList.remove('show');
+  setTimeout(()=>{ win.remove(); delete openWindows[title]; }, 300);
+}
+</script>
 </body>
 </html>
