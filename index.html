@@ -1,12 +1,4 @@
 <!DOCTYPE html>
-<!--
-Created using JS Bin
-http://jsbin.com
-
-Copyright (c) 2025 by anonymous (http://jsbin.com/vavawujule/1/edit)
-
-Released under the MIT license: http://jsbin.mit-license.org
--->
 <meta name="robots" content="noindex">
 <html lang="en">
 <head>
@@ -17,7 +9,7 @@ Released under the MIT license: http://jsbin.mit-license.org
   body{
     margin:0;
     height:100vh;
-    background:url('https://wallpapercave.com/wp/wp2751540.jpg') no-repeat center center fixed;
+    background: url('images/bliss.jpg') no-repeat center center fixed;
     background-size:cover;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow:hidden;
@@ -243,8 +235,7 @@ const rulesContent = `
   <p>i'm a minor, be aware!</p>
   <p>Please don't talk about nsfw topics blahh I won't like it!!</p>
   <p>Don't be mean for no reason, that's stupid</p>
-  <p>plz plzz plzzz dont bring up politics they suck...
-i dont wanna know what part of the poop cake is your favorite</p>
+  <p>don't bring up politics, i dont wanna know what part of the poop cake is your favorite</p>
   <p>Please avoid assuming anything about me if you do not know me personally.</p>
   <p>I PROMISE I WILL NOT HURT YOU!! if you have a question don't be afraid to ask!</p>
 `;
@@ -344,4 +335,17 @@ function closeTextWindow(title){
 }
 </script>
 </body>
+<audio id="clickSound" src="sounds/click.wav" preload="auto"></audio>
+
+<script>
+  const clickSound = document.getElementById("clickSound");
+
+  // Play sound immediately when mouse button is pressed down
+  document.addEventListener("mousedown", () => {
+    clickSound.currentTime = 0; // restart sound for rapid clicks
+    clickSound.play().catch(() => {}); // avoid browser errors
+  });
+</script>
+
+</script>
 </html>
