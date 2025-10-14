@@ -150,12 +150,15 @@
 
   .language-back{
     transform:rotateY(180deg);
-    background:#FFD93D;
-    color:#000;
-    font-size:13px; /* slightly smaller so long phrases fit */
+    font-size:13px;
     padding:6px;
     text-align:center;
   }
+
+  /* proficiency colors with improved readability */
+  .language-back.fluent { background:#4CAF50; color:#fff; }      /* green */
+  .language-back.read { background:#FF9800; color:#fff; }        /* orange with white text */
+  .language-back.learning { background:#2196F3; color:#fff; }    /* blue */
 
   /* subtle back glow on hover (not scary) */
   .file.warn:hover img{ filter: none; transform: none; }
@@ -172,7 +175,6 @@
     </div>
 
     <div class="win10-content">
-      <!-- renamed intro -> YOOOOO -->
       <div class="file" ondblclick="openTextWindow('YOOOOO', introContent)">
         <img src="https://img.icons8.com/fluency/48/document.png" alt="doc"> YOOOOO
       </div>
@@ -181,7 +183,6 @@
         <img src="https://img.icons8.com/fluency/48/document.png" alt="doc"> hobbies
       </div>
 
-      <!-- less-scary warning icon instead of skull; subtle hover glow class applied -->
       <div class="file warn warning-hover" ondblclick="openTextWindow('before-you-go', rulesContent)">
         <img src="https://img.icons8.com/fluency/48/warning-shield.png" alt="warn"> before you go
       </div>
@@ -193,7 +194,6 @@
   </div>
 
 <script>
-/* drag only while holding header */
 function dragElement(elm){
   const header = elm.querySelector('.win10-header');
   let offsetX=0, offsetY=0, isDragging=false;
@@ -218,7 +218,6 @@ function dragElement(elm){
 }
 dragElement(document.getElementById('fileExplorer'));
 
-/* file contents */
 const introContent = `
   <p>hey there buddies! I'm WITIX!</p>
   <p>let me know what you think of this website if you stumble upon it, i'd like to hear opinions</p>
@@ -241,7 +240,6 @@ const rulesContent = `
   <p>I tend to refuse random friend requests, however if you believe we know eachother you don't have to worry about that</p>
 `;
 
-/* languages: flags (w40) and data */
 const languagesContent = `
   <div style="display:flex; flex-wrap:wrap;">
     ${[
@@ -258,14 +256,13 @@ const languagesContent = `
             <img src="https://flagcdn.com/w80/${l.flag}.png" alt="${l.lang} flag">
             <span>${l.lang}</span>
           </div>
-          <div class="language-back">${l.prof}</div>
+          <div class="language-back ${l.prof === 'Fluent' ? 'fluent' : l.prof === 'Can read/understand' ? 'read' : 'learning'}">${l.prof}</div>
         </div>
       </div>
     `).join('')}
   </div>
 `;
 
-/* open/close windows with stacking + interactive flip based on mouse entry side */
 const openWindows = {};
 function openTextWindow(title, content, isExe=false){
   if(openWindows[title]) return;
@@ -283,11 +280,9 @@ function openTextWindow(title, content, isExe=false){
   `;
   document.body.appendChild(win);
   dragElement(win);
-  // small z-index bump so new window sits on top
   win.style.zIndex = 1000;
   requestAnimationFrame(()=> win.classList.add('show'));
 
-  // interactive language flip (hover) — directional based on mouse approach
   if(isExe){
     const cards = win.querySelectorAll('.language-card');
     cards.forEach(card=>{
@@ -295,20 +290,16 @@ function openTextWindow(title, content, isExe=false){
 
       card.addEventListener('mouseenter', e=>{
         const rect = card.getBoundingClientRect();
-        // compute pointer relative to center (-1..1)
         const dx = (e.clientX - (rect.left + rect.width/2)) / (rect.width/2);
         const dy = (e.clientY - (rect.top  + rect.height/2)) / (rect.height/2);
-        // clamp to [-1,1]
         const rx = Math.max(-1, Math.min(1, dy));
         const ry = Math.max(-1, Math.min(1, dx));
-        // rotate so flip direction follows pointer: rotateX from y, rotateY from x, and flip 180deg
-        const rotateX = -12 * rx; // tilt by vertical approach
-        const rotateY =  12 * ry; // tilt by horizontal approach
+        const rotateX = -12 * rx;
+        const rotateY =  12 * ry;
         inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY + 180}deg)`;
       });
 
       card.addEventListener('mousemove', e=>{
-        // subtle dynamic tilt while hovering
         const rect = card.getBoundingClientRect();
         const dx = (e.clientX - (rect.left + rect.width/2)) / (rect.width/2);
         const dy = (e.clientY - (rect.top  + rect.height/2)) / (rect.height/2);
@@ -320,14 +311,12 @@ function openTextWindow(title, content, isExe=false){
       });
 
       card.addEventListener('mouseleave', ()=>{
-        // reset
         inner.style.transform = '';
       });
     });
   }
 }
 
-/* close window */
 function closeTextWindow(title){
   const win = document.getElementById(title);
   if(!win) return;
@@ -335,18 +324,14 @@ function closeTextWindow(title){
   setTimeout(()=>{ win.remove(); delete openWindows[title]; }, 300);
 }
 </script>
-</body>
 <audio id="clickSound" src="sounds/click.wav" preload="auto"></audio>
 
 <script>
-  const clickSound = document.getElementById("clickSound");
-
-  // Play sound immediately when mouse button is pressed down
-  document.addEventListener("mousedown", () => {
-    clickSound.currentTime = 0; // restart sound for rapid clicks
-    clickSound.play().catch(() => {}); // avoid browser errors
-  });
+const clickSound = document.getElementById("clickSound");
+document.addEventListener("mousedown", () => {
+  clickSound.currentTime = 0;
+  clickSound.play().catch(() => {});
+});
 </script>
-
-</script>
+</body>
 </html>
