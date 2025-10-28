@@ -15,18 +15,22 @@
       overflow:hidden;
     }
     .win10-window{
-      width:500px;
-      height:400px;
-      background:#111;
-      border:1px solid #000;
-      position:absolute;
-      top:80px;
-      left:80px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.55);
-      display:flex;
-      flex-direction:column;
-      overflow:hidden;
-    }
+  width:500px;
+  height:400px;
+  background:#111;
+  border:1px solid #000;
+  position:absolute;
+  top:80px;
+  left:80px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.55);
+  display:flex;
+  flex-direction:column;
+  overflow:auto;
+  resize:both;       
+  min-width:300px;      
+  min-height:200px;
+}
+
     .win10-header{
       background:#000;
       color:#fff;
@@ -65,7 +69,7 @@
       text-transform:lowercase;
     }
     .file span, .file {
-      text-align: center; /* centers text labels under icons */
+      text-align: center;
      }
     .file:hover{ transform: translateY(-4px) scale(1.04); box-shadow:0 8px 18px rgba(0,0,0,0.6); }
     .file img{ width:40px; height:40px; margin-bottom:6px; display:block; }
@@ -177,11 +181,10 @@ function dragElement(elm){
 }
 dragElement(document.getElementById('fileExplorer'));
 
-// Text content
 const introContent = `<p>hey there buddies! I'm WITIX!</p>
 <p>i used to be a very famous "content" creator until i dropped my career to become a tibetan farmer</p>
-<p>let me know what you think of this TERRIBLE site I scripted while listening to ai one more game brazilian funk, i'd like to hear your opinion</p>
-<p>my Discord username is witix and it is where I'm most active, any inquiries go there!</p>`;
+<p>let me know what you think of this TERRIBLE site I scripted while listening to ai one more game brazilian funk i'd like to hear your opinion</p>
+<p>my discord username is witix and it is where I'm most active, any inquiries go there!</p>`;
 
 const hobbiesContent = `<p>I play piano, i also liked to play my harmonica but i LOST it nowhere to be found</p>
 <p>I make a lot of different things on my computer</p>
@@ -227,7 +230,6 @@ ${[
   </div>`).join('')}
 </div>`;
 
-// Dragging helper
 const openWindows = {};
 function openTextWindow(title, content, isExe=false){
   if(openWindows[title]) return;
@@ -274,7 +276,6 @@ function closeTextWindow(title){
   setTimeout(()=>{ win.remove(); delete openWindows[title]; }, 300);
 }
 
-// Attach event listeners to files
 const fileMapping = [
   {name:'hellooo', title:'YOOOOO', content:introContent},
   {name:'hobbies', title:'hobbies', content:hobbiesContent},
@@ -291,7 +292,6 @@ document.querySelectorAll('.file').forEach(file=>{
   }
 });
 
-// Click sound
 const clickSound = document.getElementById("clickSound");
 document.addEventListener("mousedown", () => {
   clickSound.currentTime = 0;
