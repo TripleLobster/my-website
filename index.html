@@ -97,11 +97,31 @@
     animation: spin 1s linear infinite;
   }
 
-  .final-image {
+  .final-container {
     position: absolute;
-    inset: 0;
-    background: url('GURTSKIBIDI.png') center/cover no-repeat;
+    bottom: 60px;
+    right: 60px;
+    text-align: center;
     display: none;
+  }
+
+  .final-image {
+    width: 220px;
+    height: 220px;
+    background: url('GURTSKIBIDI.png') center/cover no-repeat;
+    margin-bottom: 8px;
+  }
+
+  .final-text {
+    color: #000;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    user-select: none;
+  }
+
+  .final-text:hover {
+    opacity: 0.7;
   }
 </style>
 </head>
@@ -121,12 +141,17 @@
     <div class="loader" id="loader"></div>
   </div>
 
-  <div class="final-image" id="finalImage"></div>
+  <div class="final-container" id="finalContainer">
+    <div class="final-image"></div>
+    <div class="final-text" onclick="window.location.href='https://www.google.com'">
+      I believe this is a mistake.
+    </div>
+  </div>
 
 <script>
   const btn = document.getElementById('loginBtn');
   const loader = document.getElementById('loader');
-  const finalImage = document.getElementById('finalImage');
+  const finalContainer = document.getElementById('finalContainer');
   const body = document.body;
   const user = document.getElementById('user');
   const pass = document.getElementById('pass');
@@ -156,7 +181,7 @@
       body.style.background = '#fff';
       document.querySelector('.login').style.display = 'none';
       document.querySelector('.logo').style.display = 'none';
-      finalImage.style.display = 'block';
+      finalContainer.style.display = 'block';
     }, 2000);
   });
 </script>
