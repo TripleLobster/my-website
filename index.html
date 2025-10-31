@@ -99,22 +99,31 @@
 
   .final-container {
     position: absolute;
-    bottom: 60px;
-    right: 60px;
-    text-align: center;
+    inset: 0;
     display: none;
+    background: #fff;
   }
 
   .final-image {
-    width: 220px;
-    height: 220px;
-    background: url('GURTSKIBIDI.png') center/cover no-repeat;
-    margin-bottom: 8px;
+    max-width: 90%;
+    max-height: 90%;
+    margin: auto;
+    display: block;
+    position: absolute;
+    top: 5%;
+    bottom: 5%;
+    left: 5%;
+    right: 5%;
+    background: url('GURTSKIBIDI.png') center/contain no-repeat;
   }
 
   .final-text {
+    position: absolute;
+    right: 10%;
+    top: 66%;
+    font-size: 22px;
+    font-weight: bold;
     color: #000;
-    font-size: 14px;
     cursor: pointer;
     text-decoration: underline;
     user-select: none;
