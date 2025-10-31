@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auth</title>
+<title>Smooth Login</title>
 <style>
   body {
     margin: 0;
@@ -13,17 +13,12 @@
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
+    overflow: hidden;
   }
 
-  @keyframes fadeUp {
-    0% {
-      opacity: 0;
-      transform: translateY(15px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 
   .logo {
@@ -33,19 +28,20 @@
     width: 80px;
     height: 80px;
     background: url('ohio.png') center/cover no-repeat;
-    opacity: 0;
-    animation: fadeUp 0.6s ease-out forwards;
   }
 
   .login {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 5px;
     width: 260px;
     text-align: center;
-    opacity: 0;
-    animation: fadeUp 0.6s ease-out forwards;
-    animation-delay: 0.2s;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .login input {
@@ -63,7 +59,17 @@
     color: #555;
   }
 
+  .error-text {
+    color: red;
+    font-size: 12px;
+    font-weight: 300;
+    display: none;
+    text-align: left;
+    margin-left: 12px;
+  }
+
   .login button {
+    margin-top: 10px;
     padding: 12px;
     background: #000;
     border: 2px solid #fff;
@@ -79,15 +85,80 @@
     background: #fff;
     color: #000;
   }
+
+  .loader {
+    display: none;
+    border: 3px solid #fff;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    margin: 0 auto;
+    animation: spin 1s linear infinite;
+  }
+
+  .final-image {
+    position: absolute;
+    inset: 0;
+    background: url('skibidigurt.png') center/cover no-repeat;
+    display: none;
+  }
 </style>
 </head>
 <body>
   <div class="logo"></div>
 
   <div class="login">
-    <input type="text" placeholder="login">
-    <input type="password" placeholder="password">
-    <button>log in</button>
+    <div class="input-group">
+      <input id="user" type="text" placeholder="login">
+      <span id="userError" class="error-text">Введите логин</span>
+    </div>
+    <div class="input-group">
+      <input id="pass" type="password" placeholder="password">
+      <span id="passError" class="error-text">Введите пароль</span>
+    </div>
+    <button id="loginBtn">Login</button>
+    <div class="loader" id="loader"></div>
   </div>
+
+  <div class="final-image" id="finalImage"></div>
+
+<script>
+  const btn = document.getElementById('loginBtn');
+  const loader = document.getElementById('loader');
+  const finalImage = document.getElementById('finalImage');
+  const body = document.body;
+  const user = document.getElementById('user');
+  const pass = document.getElementById('pass');
+  const userError = document.getElementById('userError');
+  const passError = document.getElementById('passError');
+
+  btn.addEventListener('click', () => {
+    let valid = true;
+    userError.style.display = 'none';
+    passError.style.display = 'none';
+
+    if (user.value.trim() === '') {
+      userError.style.display = 'block';
+      valid = false;
+    }
+
+    if (pass.value.trim() === '') {
+      passError.style.display = 'block';
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    btn.style.display = 'none';
+    loader.style.display = 'block';
+    setTimeout(() => {
+      body.style.background = '#fff';
+      document.querySelector('.login').style.display = 'none';
+      document.querySelector('.logo').style.display = 'none';
+      finalImage.style.display = 'block';
+    }, 2000);
+  });
+</script>
 </body>
 </html>
