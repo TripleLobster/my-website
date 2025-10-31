@@ -1,302 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="robots" content="noindex">
-  <title>WHAT THE FUCK WHAT THE FUCK</title>
-  <style>
-    body{
-      margin:0;
-      height:100vh;
-      background: url('images/bliss.jpg') no-repeat center center fixed;
-      background-size:cover;
-      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      overflow:hidden;
-    }
-    .win10-window{
-  width:550px;
-  height:400px;
-  background:#111;
-  border:1px solid #000;
-  position:absolute;
-  top:80px;
-  left:80px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.55);
-  display:flex;
-  flex-direction:column;
-  overflow:auto;
-  resize:both;       
-  min-width:300px;      
-  min-height:200px;
-}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auth</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+  }
 
-    .win10-header{
-      background:#000;
-      color:#fff;
-      display:flex;
-      justify-content:space-between;
-      align-items:stretch;
-      height:30px;
-      cursor:move;
-      user-select:none;
+  @keyframes fadeUp {
+    0% {
+      opacity: 0;
+      transform: translateY(15px);
     }
-    .win10-header .title{ padding:5px 10px; display:flex; align-items:center; font-weight:normal; text-transform:lowercase; }
-    .win10-header .close-btn{ width:40px; background:#000; color:#fff; text-align:center; line-height:30px; cursor:default; font-size:20px; font-weight:normal; }
-    .win10-content{
-      flex:1;
-      padding:10px;
-      display:flex;
-      flex-wrap:wrap;
-      background:#222;
-      overflow:auto;
+    100% {
+      opacity: 1;
+      transform: translateY(0);
     }
-    .file{
-      width:80px;
-      height:80px;
-      background:#1a1a1a;
-      border-radius:6px;
-      margin:10px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      font-size:12px;
-      color:#fff;
-      user-select:none;
-      transition:transform 0.16s ease, box-shadow 0.16s ease;
-      text-transform:lowercase;
-    }
-    .file span, .file {
-      text-align: center;
-     }
-    .file:hover{ transform: translateY(-4px) scale(1.04); box-shadow:0 8px 18px rgba(0,0,0,0.6); }
-    .file img{ width:40px; height:40px; margin-bottom:6px; display:block; }
-    .text-window{
-      width:400px;
-      height:250px;
-      background:#111;
-      border:1px solid #000;
-      position:absolute;
-      top:120px;
-      left:120px;
-      display:flex;
-      flex-direction:column;
-      overflow:auto;
-      opacity:0;
-      transform:scale(0.72);
-      transition:opacity 0.28s ease, transform 0.28s ease;
-      resize:both;
-      color:#fff;
-    }
-    .text-window.show{ opacity:1; transform:scale(1); }
-    .text-window .win10-header .close-btn{ width:40px; text-align:center; line-height:30px; cursor:pointer; font-size:20px; font-weight:normal; transition:background 0.18s; }
-    .text-window .win10-header .close-btn:hover{ background:red; }
-    .text-window .win10-content{ flex:1; padding:12px; overflow:auto; background:#151515; color:#fff; }
-    .exe-window{ width:520px; height:380px; }
-    .language-card{
-      width:100px;
-      height:120px;
-      perspective:700px;
-      margin:8px;
-    }
-    .language-inner{
-      width:100%;
-      height:100%;
-      position:relative;
-      transform-style:preserve-3d;
-      transition: transform 0.6s cubic-bezier(.2,.9,.2,1);
-      will-change:transform;
-    }
-    .language-front, .language-back{
-      position:absolute;
-      width:100%;
-      height:100%;
-      border-radius:10px;
-      backface-visibility:hidden;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      background:#333;
-      box-shadow:0 6px 18px rgba(0,0,0,0.45);
-      font-weight:700;
-      color:#fff;
-    }
-    .language-front img{ width:64px; height:auto; margin-bottom:6px; display:block; }
-    .language-front span{ margin-top:4px; display:block; font-size:13px; }
-    .language-card:nth-child(4) .language-front span{ font-size:11px; }
-    .language-back{
-      transform:rotateY(180deg);
-      font-size:13px;
-      padding:6px;
-      text-align:center;
-    }
-    .language-back.fluent { background:#4CAF50; color:#fff; }
-    .language-back.read { background:#FF9800; color:#fff; }
-    .language-back.learning { background:#2196F3; color:#fff; }
-    .file.warn:hover img{ filter: none; transform: none; }
-    .warning-hover { transition: box-shadow .18s ease; }
-    .warning-hover:hover { box-shadow:0 10px 26px rgba(255,160,60,0.12); }
-  </style>
+  }
+
+  .logo {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    width: 80px;
+    height: 80px;
+    background: url('ohio.png') center/cover no-repeat;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+
+  .login {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 260px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out forwards;
+    animation-delay: 0.2s;
+  }
+
+  .login input {
+    padding: 12px 18px;
+    background: #fff;
+    border: none;
+    border-radius: 9999px;
+    color: #000;
+    font-size: 14px;
+    outline: none;
+    text-align: left;
+  }
+
+  .login input::placeholder {
+    color: #555;
+  }
+
+  .login button {
+    padding: 12px;
+    background: #000;
+    border: 2px solid #fff;
+    border-radius: 9999px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .login button:hover {
+    background: #fff;
+    color: #000;
+  }
+</style>
 </head>
 <body>
+  <div class="logo"></div>
 
-<div class="win10-window" id="fileExplorer">
-  <div class="win10-header">
-    <div class="title">witix explorer</div>
-    <div class="close-btn">X</div>
+  <div class="login">
+    <input type="text" placeholder="login">
+    <input type="password" placeholder="password">
+    <button>log in</button>
   </div>
-  <div class="win10-content">
-    <div class="file"> <img src="https://img.icons8.com/fluency/48/document.png" alt="doc"> hellooo </div>
-    <div class="file"> <img src="https://img.icons8.com/fluency/48/document.png" alt="doc"> hobbies </div>
-    <div class="file"> <img src="https://img.icons8.com/fluency/48/document.png" alt="doc"> just the FACTS </div>
-    <div class="file warn warning-hover"> <img src="https://img.icons8.com/fluency/48/warning-shield.png" alt="warn"> before you go </div>
-    <div class="file"> <img src="https://img.icons8.com/fluency/48/exe.png" alt="exe"> languages </div>
-  </div>
-</div>
-
-<audio id="clickSound" src="sounds/click.wav" preload="auto"></audio>
-
-<script>
-function dragElement(elm){
-  const header = elm.querySelector('.win10-header');
-  let offsetX=0, offsetY=0, isDragging=false;
-  header.addEventListener('mousedown', e=>{
-    isDragging = true;
-    offsetX = e.clientX - elm.offsetLeft;
-    offsetY = e.clientY - elm.offsetTop;
-    elm.style.zIndex = 1000;
-  });
-  document.addEventListener('mousemove', e=>{
-    if(!isDragging) return;
-    elm.style.left = (e.clientX - offsetX) + 'px';
-    elm.style.top  = (e.clientY - offsetY) + 'px';
-  });
-  document.addEventListener('mouseup', ()=>{
-    isDragging = false;
-    elm.style.zIndex = '';
-  });
-}
-dragElement(document.getElementById('fileExplorer'));
-
-const introContent = `<p>hey there buddies! I'm WITIX!</p>
-<p>i used to be a very famous "content" creator until i dropped my career to become a tibetan farmer</p>
-<p>let me know what you think of this TERRIBLE site I scripted while listening to ai one more game brazilian funk i'd like to hear your opinion</p>
-<p>my discord username is witix and it is where I'm most active, any inquiries go there!</p>`;
-
-const hobbiesContent = `<p>I play piano, i also liked to play my harmonica but i LOST it nowhere to be found</p>
-<p>I make a lot of different things on my computer</p>
-<p>I have LOTS of interests, mainly space, military aviation and firearms, but that's only three of the THOUSANDS of things I'm into</p>
-<p>I VERY MUCH like anything related to maths</p>
-<p>TERENRY TRENERY ERNTERNRY I LOVE TERNERY RENERYNRY TERRYNY</p>`;
-
-const statusContent = `<p>i'll lay back on the traditional shitposts to make more serious videos</p>
-<p>i'm currently working on these essays:</p>
-<ul>
-  <li>The PLAAF and Chengdu planes</li>
-  <li>The Arctic Warfare family (DEADLINE GODS PRAISE BE)</li>
-  <li>The SIG SG55x rifles</li>
-  </ul>
-  Other topics related to space, planes and guns.</li>
-<p>They're all in the works, me being lazy does not help</p>` ;
-
-const rulesContent = `<p>Behave normally, don't be weird</p>
-<p>I'd like to keep conversations civil!  If you're mean I will consider you a CORNBALL and block oyu</p>
-<p>Don't assume things about me or idealize me by the grace of OHIO boyyy</p>
-<p>I PROMISE I WILL NOT KILL YOU!! don't be afraid to come chat...heh</p>
-<p>I tend to refuse random friend requests, however if you believe I know you then you don't have to worry about that</p>`;
-
-const languagesContent = `<div style="display:flex; flex-wrap:wrap;">
-${[
-  {flag:'fr', lang:'French', prof:'Fluent'},
-  {flag:'gb', lang:'English', prof:'Fluent'},
-  {flag:'de', lang:'German', prof:'Fluent'},
-  {flag:'es', lang:'Spanish', prof:'Can read/understand'},
-  {flag:'ru', lang:'Russian', prof:'Learning'},
-  {flag:'jp', lang:'Japanese', prof:'Learning'},
-  {flag:'tw', lang:'Chinese', prof:'Learning'}
-].map(l => `
-  <div class="language-card">
-    <div class="language-inner">
-      <div class="language-front">
-        <img src="https://flagcdn.com/w80/${l.flag}.png" alt="${l.lang} flag">
-        <span>${l.lang}</span>
-      </div>
-      <div class="language-back ${l.prof==='Fluent'?'fluent':l.prof==='Can read/understand'?'read':'learning'}">${l.prof}</div>
-    </div>
-  </div>`).join('')}
-</div>`;
-
-const openWindows = {};
-function openTextWindow(title, content, isExe=false){
-  if(openWindows[title]) return;
-  openWindows[title] = true;
-  const win = document.createElement('div');
-  win.className = 'text-window' + (isExe ? ' exe-window' : '');
-  win.id = title;
-  win.innerHTML = `
-    <div class="win10-header">
-      <div class="title">${title}</div>
-      <div class="close-btn">X</div>
-    </div>
-    <div class="win10-content">${content}</div>`;
-  document.body.appendChild(win);
-  dragElement(win);
-  const closeBtn = win.querySelector('.close-btn');
-  closeBtn.addEventListener('click', ()=> closeTextWindow(title));
-  requestAnimationFrame(()=> win.classList.add('show'));
-
-  if(isExe){
-    const cards = win.querySelectorAll('.language-card');
-    cards.forEach(card=>{
-      const inner = card.querySelector('.language-inner');
-      const handleMove = e=>{
-        const rect = card.getBoundingClientRect();
-        const dx = (e.clientX - (rect.left + rect.width/2)) / (rect.width/2);
-        const dy = (e.clientY - (rect.top + rect.height/2)) / (rect.height/2);
-        const rx = Math.max(-1, Math.min(1, dy));
-        const ry = Math.max(-1, Math.min(1, dx));
-        const rotateX = -10 * rx;
-        const rotateY =  10 * ry + 180;
-        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      };
-      card.addEventListener('mouseenter', handleMove);
-      card.addEventListener('mousemove', handleMove);
-      card.addEventListener('mouseleave', ()=> inner.style.transform = '');
-    });
-  }
-}
-function closeTextWindow(title){
-  const win = document.getElementById(title);
-  if(!win) return;
-  win.classList.remove('show');
-  setTimeout(()=>{ win.remove(); delete openWindows[title]; }, 300);
-}
-
-const fileMapping = [
-  {name:'hellooo', title:'YOOOOO', content:introContent},
-  {name:'hobbies', title:'hobbies', content:hobbiesContent},
-  {name:'just the FACTS', title:'just the FACTS', content:statusContent},
-  {name:'before you go', title:'before you go', content:rulesContent},
-  {name:'languages', title:'languages', content:languagesContent, isExe:true}
-];
-
-document.querySelectorAll('.file').forEach(file=>{
-  const text = file.textContent.trim().toLowerCase().replace(/\s+/g,' ');
-  const mapping = fileMapping.find(m => text.includes(m.name.toLowerCase()));
-  if(mapping){
-    file.addEventListener('dblclick', ()=> openTextWindow(mapping.title, mapping.content, mapping.isExe));
-  }
-});
-
-const clickSound = document.getElementById("clickSound");
-document.addEventListener("mousedown", () => {
-  clickSound.currentTime = 0;
-  clickSound.play().catch(()=>{});
-});
-</script>
-
 </body>
 </html>
